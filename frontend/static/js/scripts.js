@@ -2,9 +2,14 @@ window.onload = () => {
   const results = document.getElementById("results");
   const searchButton = document.getElementById("button");
   const error = document.getElementById("error");
+  const eventHeading = document.getElementById("eventHeading");
   const eventsSection = document.getElementById("row");
   //If search button is clicked
   searchButton.onclick = () => {
+      results.innerHTML="";
+      error.innerHTML="";
+      eventHeading.innerHTML="";
+      eventsSection.innerHTML="";
     if (document.getElementById("artistName").value !== "") {
       const ArtistName = document.getElementById("artistName").value;
       getResponse(ArtistName);
@@ -44,26 +49,35 @@ window.onload = () => {
             <div id="links">
             <a href=${artistInfo.facebook_page_url}><i class="fa-brands fa-lg fa-facebook"></i></a>
             </div>
-            <button  id="eventButton" onclick="getEvents('${artistInfo.name}')">View Events</button>
+            <button  id="eventButton" onclick="getEvents('${artistInfo.name}','${artistInfo.upcoming_event_count}')">View Events</button>
         </div>
       </div>
       </div>
     `;
   };
 
-  window.getEvents = (artistName) => {
+  window.getEvents = (artistName, eventCount) => {
     fetch(
       `https://rest.bandsintown.com/artists/${artistName}/events?app_id=abc`
     )
       .then((response) => response.json())
-      .then((data) => showEvents(data));
+      .then((data) => {
+        if (data.length === 0 || eventCount === 0) {
+          eventHeading.innerHTML = "No upcoming events";
+          eventHeading.scrollIntoView({ behavior: "smooth" });
+        } else {
+          eventHeading.innerHTML = `${eventCount} upcoming events`;
+          eventHeading.scrollIntoView({ behavior: "smooth" });
+          showEvents(data);
+        }
+      });
   };
 
   const showEvents = (data) => {
+    console.log(data);
     eventstring = data
       .map((singleEvent) => {
-          date=new Date(singleEvent.datetime);
-          console.log(singleEvent)
+        date = new Date(singleEvent.datetime);
         return `
          <div id="column">
          <p>Event Details</p>
@@ -80,10 +94,20 @@ window.onload = () => {
             <div id="cardColumn">
             <div id="topRow">
             <p><b>Time</b></p>
-            <p>${date.toLocaleTimeString('en',{ timeStyle: 'short', hour12: true, timeZone: 'UTC' })}</p>
+            <p>${date.toLocaleTimeString("en", {
+              timeStyle: "short",
+              hour12: true,
+              timeZone: "UTC",
+            })}</p>
             </div>
             <p><b>Date</b></p>
-            <p>${date.getFullYear()+'-' + (date.getMonth()+1) + '-'+date.getDate()}</p>
+            <p>${
+              date.getFullYear() +
+              "-" +
+              (date.getMonth() + 1) +
+              "-" +
+              date.getDate()
+            }</p>
             </div>
          </div>
          </div>`;
