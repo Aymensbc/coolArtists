@@ -19,7 +19,7 @@ window.onload = () => {
     fetch(`https://rest.bandsintown.com/artists/${name}?app_id=abc`)
       .then((response) => response.json())
       .then((data) => {
-        if (data.error) {
+        if (data.error || !data) {
           error.innerHTML = "Artist does not exist!"; //if response has error then ask user to enter name again
         } else {
           error.innerHTML = "";
@@ -39,9 +39,11 @@ window.onload = () => {
         <div id=thumbImage>
             <img src=${artistInfo.thumb_url} alt="Artist image"/>
         </div>
-        <div id="artistInfo>
-            <p class="cardText">${artistInfo.name}</p>
-            <a href=${artistInfo.facebook_page_url} class="cardText">Check out our facebook page</a>
+        <div id="artistInfo">
+            <h3>${artistInfo.name}</h3>
+            <div id="links">
+            <a href=${artistInfo.facebook_page_url}><i class="fa-brands fa-lg fa-facebook"></i></a>
+            </div>
             <button  id="eventButton" onclick="getEvents('${artistInfo.name}')">View Events</button>
         </div>
       </div>
@@ -54,23 +56,41 @@ window.onload = () => {
       `https://rest.bandsintown.com/artists/${artistName}/events?app_id=abc`
     )
       .then((response) => response.json())
-      .then((data) => showEvents(data))
+      .then((data) => showEvents(data));
   };
 
   const showEvents = (data) => {
-      eventstring = data.map(singleEvent => {
-          return`
+    eventstring = data
+      .map((singleEvent) => {
+          date=new Date(singleEvent.datetime);
+          console.log(singleEvent)
+        return `
          <div id="column">
-         <div id="card">
-         <b>Name</b>
-         <p>${singleEvent.title}</p>
+         <p>Event Details</p>
+         <hr>
+         <div id="cardRow">
+            <div id="cardColumn">
+            <div id="topRow">
+                <p><b>Country</b></p>
+                <p>${singleEvent.venue.country}</p>
+            </div>
+                <p><b>City</b></p>
+                <p>${singleEvent.venue.city}</p>
+            </div>
+            <div id="cardColumn">
+            <div id="topRow">
+            <p><b>Time</b></p>
+            <p>${date.toLocaleTimeString('en',{ timeStyle: 'short', hour12: true, timeZone: 'UTC' })}</p>
+            </div>
+            <p><b>Date</b></p>
+            <p>${date.getFullYear()+'-' + (date.getMonth()+1) + '-'+date.getDate()}</p>
+            </div>
          </div>
-         </div>`
+         </div>`;
       })
-      .join('')
+      .join("");
 
-      eventsSection.innerHTML = eventstring
-      eventsSection.scrollIntoView({ behavior: "smooth" });
-      
-  }
+    eventsSection.innerHTML = eventstring;
+    eventsSection.scrollIntoView({ behavior: "smooth" });
+  };
 };

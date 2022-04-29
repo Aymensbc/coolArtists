@@ -4,7 +4,12 @@
   box-sizing: border-box;
   font-family: "Open Sans", "Helvetica Neue", sans-serif;
 }
-
+h1,
+h2,
+h3,
+h4 {
+  color: #594e3b;
+}
 header {
   width: 100vw;
   height: 100vh;
@@ -62,9 +67,9 @@ header {
 
 #card {
   display: flex;
-  align-items: center;
+  padding: 10px 16px;
+  align-items: flex-start;
   justify-content: center;
-  max-width: 500px;
   box-shadow: 0 0 20px 8px #d0d0d0;
   padding: 10px;
   margin: 20px;
@@ -73,25 +78,74 @@ header {
 
 #thumbImage img {
   border-radius: 50%;
-  max-width: 200px;
+  max-width: 150px;
 }
 
-#events{
-    display:flex;
-}
+
 
 #row {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    width: 100%;
-  }
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+  padding-left: 10px;
+  align-items: center;
+  justify-content: center;
+}
 
-  #column {
-    display: flex;
-    min-width:300px;
-    flex-direction: column;
-    flex-basis: 100%;
-    flex: 1;
-    height: 200px;
-  }
+#column {
+  max-width: 350px;
+  min-width: 350px;
+  padding: 20px;
+  flex-direction: column;
+  border-radius: 4px;
+  flex-basis: 100%;
+  flex: 1;
+  margin: 20px;
+  box-shadow: 2px 2px 22px 6px rgba(0, 0, 0, 0.42);
+}
+
+#cardRow {
+  display: flex;
+}
+
+#cardColumn {
+  flex: 50%;
+}
+
+#topRow{
+    padding-bottom: 10px;
+}
+
+h1 {
+  display: flex;
+  justify-content: center;
+  padding: 6px;
+  color: #594e3b;
+}
+
+#artistInfo {
+  padding-top: 10px;
+  padding-left: 10px;
+}
+
+#links {
+  padding: 10px 0px 10px 0px;
+}
+
+#eventButton {
+  background-color: #594e3b;
+  border-radius: 8px;
+  border-style: none;
+  color: #ffffff;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 14px;
+  font-weight: 500;
+  height: 40px;
+  margin: 0;
+  outline: none;
+  padding: 10px 16px;
+  text-align: center;
+  text-decoration: none;
+}
