@@ -4,12 +4,14 @@ window.onload = () => {
   const error = document.getElementById("error");
   const eventHeading = document.getElementById("eventHeading");
   const eventsSection = document.getElementById("row");
+
   //If search button is clicked
   searchButton.onclick = () => {
-      results.innerHTML="";
-      error.innerHTML="";
-      eventHeading.innerHTML="";
-      eventsSection.innerHTML="";
+    results.innerHTML = "";
+    error.innerHTML = "";
+    eventHeading.innerHTML = "";
+    eventsSection.innerHTML = "";
+
     if (document.getElementById("artistName").value !== "") {
       const ArtistName = document.getElementById("artistName").value;
       getResponse(ArtistName);
@@ -28,17 +30,17 @@ window.onload = () => {
           error.innerHTML = "Artist does not exist!"; //if response has error then ask user to enter name again
         } else {
           error.innerHTML = "";
-          results.innerHTML = displayResults(data);
+          results.innerHTML = displayResults(data,name);
           results.scrollIntoView({ behavior: "smooth" });
         }
       });
   }
 
   //Displaying the artist based on the fetched name
-  const displayResults = (artistInfo) => {
+  const displayResults = (artistInfo,name) => {
     console.log(artistInfo);
     return `
-      <h1>Showing results for ${artistInfo.name}</h1>
+      <h1>Showing results for ${name}</h1>
       <div id=container>
       <div id="card">
         <div id=thumbImage>
