@@ -18,7 +18,7 @@ header {
 
 .header-content {
   margin-top: 30px;
-  color: white;
+  color: #594e3b;
   text-align: center;
   font-size: 6vmin;
 }
@@ -34,15 +34,64 @@ header {
 
 .search-button {
   padding-right: 10px;
-  color: burlywood;
+  color: #867a6a;
 }
 
-.search-text{
-    border: none;
-    background: none;
-    font-size: 3vmin;
-    outline:none;
-    padding-left: 10px;
-    margin-left: 5px;
-    width: 100%;
+.search-text {
+  border: none;
+  background: none;
+  font-size: 3vmin;
+  outline: none;
+  padding-left: 10px;
+  margin-left: 5px;
+  width: 100%;
 }
+
+#error {
+  font-size: 3vmin;
+  color: white;
+  padding: 10px;
+  font-weight: 100;
+}
+
+#container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 500px;
+  box-shadow: 0 0 20px 8px #d0d0d0;
+  padding: 10px;
+  margin: 20px;
+  border-radius: 10px;
+}
+
+#thumbImage img {
+  border-radius: 50%;
+  max-width: 200px;
+}
+
+#events{
+    display:flex;
+}
+
+#row {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+  }
+
+  #column {
+    display: flex;
+    min-width:300px;
+    flex-direction: column;
+    flex-basis: 100%;
+    flex: 1;
+    height: 200px;
+  }
