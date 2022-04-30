@@ -66,7 +66,14 @@
     `;
   };
 
-  window.getEvents = async (artistName, eventCount) => {
+  window.getEvents =  (artistName, eventCount) => {
+    if(eventCount===0)
+    {
+      document.getElementById("eventHeading").innerHTML = "No upcoming events";
+      document.getElementById("eventHeading").scrollIntoView({ behavior: "smooth" }); 
+      return 0;
+    }
+    else{
     try{
     fetch(
       `https://rest.bandsintown.com/artists/${artistName}/events?app_id=abc`
@@ -85,10 +92,10 @@
     }catch(e){
       return e;
     }
+  }
   };
 
   const showEvents = (data) => {
-    console.log(data);
     eventstring = data
       .map((singleEvent) => {
         date = new Date(singleEvent.datetime);
@@ -133,4 +140,4 @@
   };
 
 
-module.exports= {displayResults , getEvents};
+module.exports= {displayResults,getEvents};

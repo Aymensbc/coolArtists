@@ -19,6 +19,7 @@ header {
   display: flex;
   align-items: flex-start;
   justify-content: center;
+  margin-bottom: 6px;
 }
 
 .header-content {
@@ -88,7 +89,6 @@ header {
   flex-direction: row;
   flex-wrap: wrap;
   width: 100%;
-  padding-left: 10px;
   align-items: center;
   justify-content: center;
 }
@@ -120,7 +120,6 @@ header {
 h1 {
   display: flex;
   justify-content: center;
-  padding: 6px;
   color: #594e3b;
 }
 
