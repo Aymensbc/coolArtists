@@ -1,53 +1,56 @@
+const results = document.getElementById("results");
+const searchButton = document.getElementById("button");
+const error = document.getElementById("error");
+const eventHeading = document.getElementById("eventHeading");
+const eventsSection = document.getElementById("row");
 
-  const results = document.getElementById("results");
-  const searchButton = document.getElementById("button");
-  const error = document.getElementById("error");
-  const eventHeading = document.getElementById("eventHeading");
-  const eventsSection = document.getElementById("row");
-
-  //If search button is clicked
-  window.onload = () => {
+//If search button is clicked then fetch the artist's name
+window.onload = () => {
   searchButton.onclick = () => {
+    //clear all innerHTML when the search button is clicked
     results.innerHTML = "";
     error.innerHTML = "";
     eventHeading.innerHTML = "";
     eventsSection.innerHTML = "";
 
+    //if anything is entered in the search bar
     if (document.getElementById("artistName").value !== "") {
       const ArtistName = document.getElementById("artistName").value;
+
+      //GetReponse will fetch artists info based onn the name enetered in the search bar
       getResponse(ArtistName);
     } else {
       //if user has not entered any name then ask the user to enter name again
       error.innerHTML = "Please enter an Artist's name!";
     }
   };
-}
+};
 
-  //Fetching data from API using the Artsit's name
-  async function getResponse(name) {
-    try{
+//Fetching data from API using the Artsit's name
+async function getResponse(name) {
+  try {
     fetch(`https://rest.bandsintown.com/artists/${name}?app_id=abc`)
       .then((response) => response.json())
       .then((data) => {
         if (data.error || !data) {
-          error.innerHTML = "Artist does not exist!"; //if response has error then ask user to enter name again
+          error.innerHTML = "Artist does not exist!"; //if response has error then ask user to enter name again.
           return 0;
         } else {
           error.innerHTML = "";
-          results.innerHTML = displayResults(data,name);
+          results.innerHTML = displayResults(data, name);
           results.scrollIntoView({ behavior: "smooth" });
           return 1;
         }
-      })}
-      catch(e){
-        return 0;
-      }
-  } 
+      });
+  } catch (e) {
+    return 0;
+  }
+}
 
-  //Displaying the artist based on the fetched name
-  const displayResults = (artistInfo,name) => {
-
-    return `
+//Displaying the artist based on the fetched name. A card will appear beneath the header
+//In the template literal a button is added with the id "eventButton". Its click will call getEvents function
+const displayResults = (artistInfo, name) => {
+  return `
       <h1>Showing results for ${name}</h1>
       <div id=container>
       <div id="card">
@@ -64,42 +67,44 @@
       </div>
       </div>
     `;
-  };
+};
 
-  window.getEvents =  (artistName, eventCount) => {
-    if(eventCount===0)
-    {
-      document.getElementById("eventHeading").innerHTML = "No upcoming events";
-      document.getElementById("eventHeading").scrollIntoView({ behavior: "smooth" }); 
-      return 0;
-    }
-    else{
-    try{
-    fetch(
-      `https://rest.bandsintown.com/artists/${artistName}/events?app_id=abc`
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.length === 0 || eventCount === 0) {
-          eventHeading.innerHTML = "No upcoming events";
-          eventHeading.scrollIntoView({ behavior: "smooth" });
-        } else {
-          eventHeading.innerHTML = `${eventCount} upcoming events`;
-          eventHeading.scrollIntoView({ behavior: "smooth" });
-          showEvents(data);
-        }
-      })
-    }catch(e){
+//when #eventButton button is clicked .It will fetch events based on artistName 
+window.getEvents = (artistName, eventCount) => {
+  //Incase of no events fetch call is not made.
+  if (eventCount === 0) {  
+    document.getElementById("eventHeading").innerHTML = "No upcoming events";
+    document
+      .getElementById("eventHeading")
+      .scrollIntoView({ behavior: "smooth" });
+    return 0;
+  } else {
+    try {
+      fetch(
+        `https://rest.bandsintown.com/artists/${artistName}/events?app_id=abc`
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.length === 0 || eventCount === 0) { 
+            eventHeading.innerHTML = "No upcoming events";
+            eventHeading.scrollIntoView({ behavior: "smooth" });
+          } else {
+            eventHeading.innerHTML = `${eventCount} upcoming events`;
+            eventHeading.scrollIntoView({ behavior: "smooth" });
+            showEvents(data);
+          }
+        });
+    } catch (e) {
       return e;
     }
   }
-  };
+};
 
-  const showEvents = (data) => {
-    eventstring = data
-      .map((singleEvent) => {
-        date = new Date(singleEvent.datetime);
-        return `
+//Used to display the event cards showing country , time date and city. 
+const showEvents = (data) => {
+  eventstring = data.map((singleEvent) => {  //map will loop over all the events
+      date = new Date(singleEvent.datetime);
+      return `
          <div id="column">
          <p>Event Details</p>
          <hr>
@@ -116,28 +121,26 @@
             <div id="topRow">
             <p><b>Time</b></p>
             <p>${date.toLocaleTimeString("en", {
-              timeStyle: "short",
-              hour12: true,
-              timeZone: "UTC",
-            })}</p>
+        timeStyle: "short",
+        hour12: true,
+        timeZone: "UTC",
+      })}</p>
             </div>
             <p><b>Date</b></p>
-            <p>${
-              date.getFullYear() +
-              "-" +
-              (date.getMonth() + 1) +
-              "-" +
-              date.getDate()
-            }</p>
+            <p>${date.getFullYear() +
+        "-" +
+        (date.getMonth() + 1) +
+        "-" +
+        date.getDate()
+        }</p>
             </div>
          </div>
          </div>`;
-      })
-      .join("");
+    })
+    .join("");
 
-    eventsSection.innerHTML = eventstring;
-    eventsSection.scrollIntoView({ behavior: "smooth" });
-  };
+  eventsSection.innerHTML = eventstring;
+  eventsSection.scrollIntoView({ behavior: "smooth" });
+};
 
-
-module.exports= {displayResults,getEvents};
+module.exports = { displayResults, getEvents };

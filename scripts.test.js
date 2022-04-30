@@ -21,3 +21,4 @@ it("should change inner text  if event count is 0" ,() => {
   const result = getEvents("Coldplay", 0);
   expect(document.getElementById("eventHeading").innerHTML).toBe("No upcoming events");
 })
+
