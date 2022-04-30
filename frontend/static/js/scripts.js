@@ -1,4 +1,4 @@
-window.onload = () => {
+
   const results = document.getElementById("results");
   const searchButton = document.getElementById("button");
   const error = document.getElementById("error");
@@ -6,6 +6,7 @@ window.onload = () => {
   const eventsSection = document.getElementById("row");
 
   //If search button is clicked
+  window.onload = () => {
   searchButton.onclick = () => {
     results.innerHTML = "";
     error.innerHTML = "";
@@ -20,25 +21,32 @@ window.onload = () => {
       error.innerHTML = "Please enter an Artist's name!";
     }
   };
+}
 
   //Fetching data from API using the Artsit's name
   async function getResponse(name) {
+    try{
     fetch(`https://rest.bandsintown.com/artists/${name}?app_id=abc`)
       .then((response) => response.json())
       .then((data) => {
         if (data.error || !data) {
           error.innerHTML = "Artist does not exist!"; //if response has error then ask user to enter name again
+          return 0;
         } else {
           error.innerHTML = "";
           results.innerHTML = displayResults(data,name);
           results.scrollIntoView({ behavior: "smooth" });
+          return 1;
         }
-      });
-  }
+      })}
+      catch(e){
+        return 0;
+      }
+  } 
 
   //Displaying the artist based on the fetched name
   const displayResults = (artistInfo,name) => {
-    console.log(artistInfo);
+
     return `
       <h1>Showing results for ${name}</h1>
       <div id=container>
@@ -58,7 +66,8 @@ window.onload = () => {
     `;
   };
 
-  window.getEvents = (artistName, eventCount) => {
+  window.getEvents = async (artistName, eventCount) => {
+    try{
     fetch(
       `https://rest.bandsintown.com/artists/${artistName}/events?app_id=abc`
     )
@@ -72,7 +81,10 @@ window.onload = () => {
           eventHeading.scrollIntoView({ behavior: "smooth" });
           showEvents(data);
         }
-      });
+      })
+    }catch(e){
+      return e;
+    }
   };
 
   const showEvents = (data) => {
@@ -119,4 +131,6 @@ window.onload = () => {
     eventsSection.innerHTML = eventstring;
     eventsSection.scrollIntoView({ behavior: "smooth" });
   };
-};
+
+
+module.exports= {displayResults , getEvents};
