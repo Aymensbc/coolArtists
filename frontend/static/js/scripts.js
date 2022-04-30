@@ -31,7 +31,7 @@ async function getResponse(name) {
   try {
     fetch(`https://rest.bandsintown.com/artists/${name}?app_id=abc`)
       .then((response) => response.json())
-      .then((data) => {
+      .then((data) => {console.log(data)
         if (data.error || !data) {
           error.innerHTML = "Artist does not exist!"; //if response has error then ask user to enter name again.
           return 0;
@@ -62,17 +62,19 @@ const displayResults = (artistInfo, name) => {
             <div id="links">
             <a href=${artistInfo.facebook_page_url}><i class="fa-brands fa-lg fa-facebook"></i></a>
             </div>
-            <button  id="eventButton" onclick="getEvents('${artistInfo.name}','${artistInfo.upcoming_event_count}')">View Events</button>
-        </div>
+            <button  id="eventButton" onclick="getEvents('${artistInfo.name}','${artistInfo.upcoming_event_count}')">View Upcoming Events</button>
+            <br>
+            <button id="eventButton" onClick="getPastEvents('${artistInfo.name}')">View Past Events</button>
+            </div>
       </div>
       </div>
     `;
 };
 
-//when #eventButton button is clicked .It will fetch events based on artistName 
+//when #eventButton button is clicked .It will fetch events based on artistName
 window.getEvents = (artistName, eventCount) => {
-  //Incase of no events fetch call is not made.
-  if (eventCount === 0) {  
+  //Incase of no events, fetch call is not made.
+  if (eventCount === 0) {
     document.getElementById("eventHeading").innerHTML = "No upcoming events";
     document
       .getElementById("eventHeading")
@@ -85,14 +87,9 @@ window.getEvents = (artistName, eventCount) => {
       )
         .then((response) => response.json())
         .then((data) => {
-          if (data.length === 0 || eventCount === 0) { 
-            eventHeading.innerHTML = "No upcoming events";
-            eventHeading.scrollIntoView({ behavior: "smooth" });
-          } else {
             eventHeading.innerHTML = `${eventCount} upcoming events`;
             eventHeading.scrollIntoView({ behavior: "smooth" });
             showEvents(data);
-          }
         });
     } catch (e) {
       return e;
@@ -100,9 +97,31 @@ window.getEvents = (artistName, eventCount) => {
   }
 };
 
-//Used to display the event cards showing country , time date and city. 
+window.getPastEvents = (name) => {
+  try{
+    fetch(`https://rest.bandsintown.com/artists/${name}/events?app_id=abc&date=past`)
+    .then((response)=>response.json())
+    .then((data) => {
+      if(data.length == 0){
+        eventHeading.innerHTML = "No past Events found";
+        eventHeading.scrollIntoView({ behavior: "smooth" });
+      }
+      else{
+        eventHeading.innerHTML = `${data.length} past events found`;
+        eventHeading.scrollIntoView({ behavior: "smooth" });
+        showEvents(data);
+      }
+    })
+  } catch(e){
+    return e;
+  }
+}
+
+//Used to display the event cards showing country , time date and city.
 const showEvents = (data) => {
-  eventstring = data.map((singleEvent) => {  //map will loop over all the events
+  eventstring = data
+    .map((singleEvent) => {
+      //map will loop over all the events
       date = new Date(singleEvent.datetime);
       return `
          <div id="column">
@@ -137,10 +156,11 @@ const showEvents = (data) => {
          </div>
          </div>`;
     })
-    .join("");
+    .join(""); 
 
   eventsSection.innerHTML = eventstring;
   eventsSection.scrollIntoView({ behavior: "smooth" });
 };
 
+//exports tested in scripts.test.js file
 module.exports = { displayResults, getEvents };
