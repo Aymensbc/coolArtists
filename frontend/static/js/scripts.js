@@ -3,9 +3,20 @@ const searchButton = document.getElementById("button");
 const error = document.getElementById("error");
 const eventHeading = document.getElementById("eventHeading");
 const eventsSection = document.getElementById("row");
+const inputBar = document.getElementById("artistName")
 
 //If search button is clicked then fetch the artist's name
 window.onload = () => {
+
+  //If enter key is pressed instead of clicking on search button
+  inputBar.onkeydown = (event) => {
+    if(event.key === "Enter"){
+      event.preventDefault();
+      searchButton.click();
+    }
+
+  }
+
   searchButton.onclick = () => {
     //clear all innerHTML when the search button is clicked
     results.innerHTML = "";
@@ -90,7 +101,6 @@ window.getEvents = (artistName, eventCount) => {
             eventHeading.innerHTML = `${eventCount} upcoming events`;
             eventHeading.scrollIntoView({ behavior: "smooth" });
             showEvents(data);
-            return 1;
         });
     } catch (e) {
       return e;
