@@ -79,7 +79,7 @@ const displayResults = (artistInfo, name) => {
         <div id="artistInfo">
             <h3>${artistInfo.name}</h3>
             <div id="links">
-            <a target="_blank" href=${artistInfo.facebook_page_url}><i class="fa-brands fa-lg fa-facebook"></i></a>
+            ${artistInfo.facebook_page_url!==""?`<a target="_blank" href=${artistInfo.facebook_page_url}><i class="fa-brands fa-lg fa-facebook"></i></a>`:""}
             ${twitter?`<a target="_blank" href=${twitter}><i class="fab fa-lg fa-twitter"></i></a>`:''}
             ${website?`<a target="_blank" href=${website}><i class="fa-solid fa-link"></i></a>`:''}
             </div>
