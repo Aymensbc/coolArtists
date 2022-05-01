@@ -5,18 +5,17 @@ const eventHeading = document.getElementById("eventHeading");
 const eventsSection = document.getElementById("row");
 const inputBar = document.getElementById("artistName")
 
-//If search button is clicked then fetch the artist's name
-window.onload = () => {
 
+window.onload = () => {
   //If enter key is pressed instead of clicking on search button
   inputBar.onkeydown = (event) => {
-    if(event.key === "Enter"){
+    if (event.key === "Enter") {
       event.preventDefault();
       searchButton.click();
     }
-
   }
 
+  //If search button is clicked then fetch the artist's name
   searchButton.onclick = () => {
     //clear all innerHTML when the search button is clicked
     results.innerHTML = "";
@@ -25,24 +24,22 @@ window.onload = () => {
     eventsSection.innerHTML = "";
 
     //if anything is entered in the search bar
+    //GetReponse will fetch artists info based onn the name enetered in the search bar
     if (document.getElementById("artistName").value !== "") {
-      const ArtistName = document.getElementById("artistName").value;
-
-      //GetReponse will fetch artists info based onn the name enetered in the search bar
-      getResponse(ArtistName);
+      const artistName = document.getElementById("artistName").value;
+      getResponse(artistName);
     } else {
-      //if user has not entered any name then ask the user to enter name again
-      error.innerHTML = "Please enter an Artist's name!";
+      error.innerHTML = "Please enter an Artist's name!"; //if user has not entered any name then ask the user to enter name again
     }
   };
 };
 
-//Fetching data from API using the Artsit's name
+//Fetching data from API using the Artist's name
 async function getResponse(name) {
   try {
     fetch(`https://rest.bandsintown.com/artists/${name}?app_id=abc`)
       .then((response) => response.json())
-      .then((data) => {console.log(data)
+      .then((data) => {
         if (data.error || !data) {
           error.innerHTML = "Artist does not exist!"; //if response has error then ask user to enter name again.
           return 0;
@@ -62,7 +59,7 @@ async function getResponse(name) {
 //In the template literal a button is added with the id "eventButton". Its click will call getEvents function
 const displayResults = (artistInfo, name) => {
   return `
-      <h1>Showing results for ${name}</h1>
+      <h1>Showing results for "${name}"</h1>
       <div id=container>
       <div id="card">
         <div id=thumbImage>
@@ -83,13 +80,11 @@ const displayResults = (artistInfo, name) => {
 };
 
 //when #eventButton button is clicked .It will fetch events based on artistName
+//Incase of no events, fetch call is not made.
 window.getEvents = (artistName, eventCount) => {
-  //Incase of no events, fetch call is not made.
   if (eventCount === 0) {
     document.getElementById("eventHeading").innerHTML = "No upcoming events";
-    document
-      .getElementById("eventHeading")
-      .scrollIntoView({ behavior: "smooth" });
+    document.getElementById("eventHeading").scrollIntoView({ behavior: "smooth" });
     return 0;
   } else {
     try {
@@ -98,9 +93,9 @@ window.getEvents = (artistName, eventCount) => {
       )
         .then((response) => response.json())
         .then((data) => {
-            eventHeading.innerHTML = `${eventCount} upcoming events`;
-            eventHeading.scrollIntoView({ behavior: "smooth" });
-            showEvents(data);
+          eventHeading.innerHTML = `${eventCount} upcoming events`;
+          eventHeading.scrollIntoView({ behavior: "smooth" });
+          showEvents(data);
         });
     } catch (e) {
       return e;
@@ -108,33 +103,33 @@ window.getEvents = (artistName, eventCount) => {
   }
 };
 
+//Fetch past events when the second events button is clicked.
 window.getPastEvents = (name) => {
-  try{
+  try {
     fetch(`https://rest.bandsintown.com/artists/${name}/events?app_id=abc&date=past`)
-    .then((response)=>response.json())
-    .then((data) => {
-      if(data.length == 0){
-        eventHeading.innerHTML = "No past Events found";
-        eventHeading.scrollIntoView({ behavior: "smooth" });
-      }
-      else{
-        eventHeading.innerHTML = `${data.length} past events found`;
-        eventHeading.scrollIntoView({ behavior: "smooth" });
-        showEvents(data);
-      }
-    })
-  } catch(e){
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.length == 0) {
+          eventHeading.innerHTML = "No past Events found";
+          eventHeading.scrollIntoView({ behavior: "smooth" });
+        }
+        else {
+          eventHeading.innerHTML = `${data.length} past events found`;
+          eventHeading.scrollIntoView({ behavior: "smooth" });
+          showEvents(data);
+        }
+      })
+  } catch (e) {
     return e;
   }
 }
 
 //Used to display the event cards showing country , time date and city.
 const showEvents = (data) => {
-  eventstring = data
-    .map((singleEvent) => {
-      //map will loop over all the events
-      date = new Date(singleEvent.datetime);
-      return `
+  eventstring = data.map((singleEvent) => {
+    //map will loop over all the events
+    date = new Date(singleEvent.datetime);
+    return `
          <div id="column">
          <p>Event Details</p>
          <hr>
@@ -150,25 +145,15 @@ const showEvents = (data) => {
             <div id="cardColumn">
             <div id="topRow">
             <p><b>Time</b></p>
-            <p>${date.toLocaleTimeString("en", {
-        timeStyle: "short",
-        hour12: true,
-        timeZone: "UTC",
-      })}</p>
+            <p>${date.toLocaleTimeString("en", { timeStyle: "short", hour12: true, timeZone: "UTC", })}</p>
             </div>
             <p><b>Date</b></p>
-            <p>${date.getFullYear() +
-        "-" +
-        (date.getMonth() + 1) +
-        "-" +
-        date.getDate()
-        }</p>
+            <p>${date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate()}</p>
             </div>
          </div>
          </div>`;
-    })
-    .join(""); 
-
+  })
+    .join("");
   eventsSection.innerHTML = eventstring;
   eventsSection.scrollIntoView({ behavior: "smooth" });
 };

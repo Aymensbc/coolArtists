@@ -4,13 +4,15 @@
   box-sizing: border-box;
   font-family: "Open Sans", "Helvetica Neue", sans-serif;
 }
+
 h1,
 h2,
 h3,
 h4 {
   color: #594e3b;
 }
-header {
+
+#topContent {
   width: 100vw;
   height: 100vh;
   background-image: url("../images/background.jpg");
@@ -96,9 +98,9 @@ header {
   min-width: 350px;
   padding: 20px;
   flex-direction: column;
-  border-radius: 4px;
   flex-basis: 100%;
   flex: 1;
+  border-radius: 4px;
   margin: 20px;
   box-shadow: 2px 2px 22px 6px rgba(0, 0, 0, 0.42);
 }
@@ -127,7 +129,7 @@ h1 {
 }
 
 #links {
-  padding: 10px 0px 10px 0px;
+  padding: 10px 0 10px 0;
 }
 
 #eventButton {
@@ -147,5 +149,3 @@ h1 {
   text-decoration: none;
   min-width: 175px;
 }
-
-
