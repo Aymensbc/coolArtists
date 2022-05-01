@@ -12,6 +12,11 @@ h4 {
   color: #594e3b;
 }
 
+a {
+  text-decoration: none;
+  color:#594e3b;
+}
+
 #topContent {
   width: 100vw;
   height: 100vh;

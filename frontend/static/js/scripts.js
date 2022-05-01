@@ -58,6 +58,17 @@ async function getResponse(name) {
 //Displaying the artist based on the fetched name. A card will appear beneath the header
 //In the template literal a button is added with the id "eventButton". Its click will call getEvents function
 const displayResults = (artistInfo, name) => {
+  console.log(artistInfo)
+  let twitter=null;
+  let website=null;
+  if (artistInfo.links[0]) {
+    artistInfo.links.map(link => {
+      if (link.type === "website")
+        website = link.url;
+      if (link.type === "twitter")
+        twitter = link.url;
+    })
+  }
   return `
       <h1>Showing results for "${name}"</h1>
       <div id=container>
@@ -68,7 +79,9 @@ const displayResults = (artistInfo, name) => {
         <div id="artistInfo">
             <h3>${artistInfo.name}</h3>
             <div id="links">
-            <a href=${artistInfo.facebook_page_url}><i class="fa-brands fa-lg fa-facebook"></i></a>
+            <a target="_blank" href=${artistInfo.facebook_page_url}><i class="fa-brands fa-lg fa-facebook"></i></a>
+            ${twitter?`<a target="_blank" href=${twitter}><i class="fab fa-lg fa-twitter"></i></a>`:''}
+            ${website?`<a target="_blank" href=${website}><i class="fa-solid fa-link"></i></a>`:''}
             </div>
             <button  id="eventButton" onclick="getEvents('${artistInfo.name}','${artistInfo.upcoming_event_count}')">View Upcoming Events</button>
             <br>
