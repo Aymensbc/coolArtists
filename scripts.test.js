@@ -7,7 +7,7 @@ const { displayResults, getEvents } = require("./frontend/static/js/scripts");
 
 //the display response shouldnt be null or undefined
 it("should not be null or undefined", () => {
-  const result = displayResults("Maroon 5", "jk");
+  const result = displayResults({links:{}}, "jk");
   expect(result).toBeTruthy();
 });
 

@@ -58,7 +58,6 @@ async function getResponse(name) {
 //Displaying the artist based on the fetched name. A card will appear beneath the header
 //In the template literal a button is added with the id "eventButton". Its click will call getEvents function
 const displayResults = (artistInfo, name) => {
-  console.log(artistInfo)
   let twitter=null;
   let website=null;
   if (artistInfo.links[0]) {
@@ -138,7 +137,7 @@ window.getPastEvents = (name) => {
 }
 
 //Used to display the event cards showing country , time date and city.
-const showEvents = (data) => {
+const showEvents = (data) => { 
   eventstring = data.map((singleEvent) => {
     //map will loop over all the events
     date = new Date(singleEvent.datetime);
@@ -161,7 +160,7 @@ const showEvents = (data) => {
             <p>${date.toLocaleTimeString("en", { timeStyle: "short", hour12: true, timeZone: "UTC", })}</p>
             </div>
             <p><b>Date</b></p>
-            <p>${date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate()}</p>
+            <p>${date.getDate() + "-" + (date.getMonth() + 1 ) + "-" + date.getFullYear() }</p>
             </div>
          </div>
          </div>`;
