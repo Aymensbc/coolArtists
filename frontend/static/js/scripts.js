@@ -90,6 +90,7 @@ window.getEvents = (artistName, eventCount) => {
             eventHeading.innerHTML = `${eventCount} upcoming events`;
             eventHeading.scrollIntoView({ behavior: "smooth" });
             showEvents(data);
+            return 1;
         });
     } catch (e) {
       return e;
